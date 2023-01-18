@@ -31,6 +31,11 @@ class WeatherAPI:
         end=end.strftime("%Y-%m-%d")
         return self.from_to_url(start,end)
 
+    def today_url(self):
+        today=datetime.date.today()
+        today=today.strftime("%Y-%m-%d")
+        return self.from_to_url(today,today)
+
     def query(self,url):
         data=urllib.request.urlopen(url)
         json_data=json.loads(data.read())
@@ -45,6 +50,9 @@ class WeatherAPI:
 
     def from_to_query(self,start,end):
         return self.query(self.from_to_url(start,end))
+
+    def today_query(self):
+        return self.query(self.today_url())
 
 
 

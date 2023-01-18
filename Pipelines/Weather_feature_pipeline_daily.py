@@ -1,5 +1,5 @@
+import os
 import modal
-import pandas as pd
 from Weather_API_utility import *
 LOCAL=False
 def weather_feature_engineering(df):
@@ -11,20 +11,26 @@ def weather_feature_engineering(df):
           "description","conditions"]
     temp=temp.drop(drop,axis=1)
     return temp
-    
-if LOCAL==False:
-    stub=modal.Stub()
-    image=modal.Image.debian_slim().pip_install(["hopsworks","joblib"])
 
-    @stub.function(image=image, schedule=modal.Period(days=1), secret=modal.Secret.from_name("lab1"))
-    def f():
-        g()
+if LOCAL == False:
+   stub = modal.Stub("daily-weather")
+   image = modal.Image.debian_slim().pip_install(["hopsworks","joblib","seaborn","scikit-learn","beautifulsoup4"]) 
+
+   @stub.function(image=image, schedule=modal.Period(days=1), secret=modal.Secret.from_name("lab1"))
+   def f():
+       g()
+
+
+
+
+
 def g():
     import hopsworks
     import pandas as pd
+    import datetime
 
-    project=hopsworks.login(project="test42")
-    fs=project.get_feature_store()
+    project = hopsworks.login(project="test42")
+    fs = project.get_feature_store()
 
     remain=['datetime', 'tempmax', 'tempmin', 'temp', 'feelslikemax',
        'feelslikemin', 'feelslike', 'dew', 'humidity', 'precip', 'precipprob',
@@ -37,24 +43,25 @@ def g():
     unitGroup="metric"
     include="days"
     w=WeatherAPI(weather_api,lat,lng,unitGroup,include)
-    #get the past 40 days of weather data
-    weather_data=w.historical_query(40)
-    weather_data=weather_feature_engineering(weather_data)
-
     
 
-    backfill_weather=fs.get_or_create_feature_group(
+    df = w.today_query()#1 data point
+    df = weather_feature_engineering(df)
+    #df["datetime"]=df["datetime"].apply(lambda x:datetime.datetime.strptime(x,"%Y-%m-%d"))
+
+    weather=fs.get_or_create_feature_group(
         name="historical_weather",
         version=1,
         primary_key=remain,
         description="weather data for the past month"
         )
-    backfill_weather.insert(weather_data, write_options={"wait_for_job":False})
+    weather.insert(df, write_options={"wait_for_job":False})
 
 
 if __name__ == "__main__":
-    if LOCAL==True:
+    if LOCAL == True :
         g()
     else:
-        with stub.run():
+       stub.deploy("daily-weather")
+       with stub.run():
             f()

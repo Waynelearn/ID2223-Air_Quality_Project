@@ -1,5 +1,6 @@
 import pandas as pd
 import modal
+import datetime
 
 LOCAL=True
 
@@ -24,6 +25,8 @@ def g():
         primary_key=['datetime','aqi'], 
         description="aqi")
     df=pd.read_csv("https://raw.githubusercontent.com/Waynelearn/ID2223-Air_Quality_Project/main/Pipelines/aqi_data.csv",index_col=0)
+    df["datetime"]=df["datetime"].apply(lambda x:datetime.datetime.strptime(x,"%d/%m/%Y"))
+    df["datetime"]=df["datetime"].apply(lambda x:x.strftime("%Y-%m-%d"))
     fg.insert(df, write_options={"wait_for_job" : False})
 
 if __name__ == "__main__":
