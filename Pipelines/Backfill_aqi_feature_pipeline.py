@@ -2,7 +2,7 @@ import pandas as pd
 import modal
 import datetime
 
-LOCAL=True
+LOCAL=False
 
 if LOCAL==False:
     stub=modal.Stub()

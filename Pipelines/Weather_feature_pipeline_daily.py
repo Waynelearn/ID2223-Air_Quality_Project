@@ -16,7 +16,7 @@ if LOCAL == False:
    stub = modal.Stub("daily-weather")
    image = modal.Image.debian_slim().pip_install(["hopsworks","joblib","seaborn","scikit-learn","beautifulsoup4"]) 
 
-   @stub.function(image=image, schedule=modal.Period(days=1), secret=modal.Secret.from_name("lab1"))
+   @stub.function(image=image, schedule=modal.Cron("59 15 * * *"), secret=modal.Secret.from_name("lab1"))
    def f():
        g()
 

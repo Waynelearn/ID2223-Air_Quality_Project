@@ -1,13 +1,13 @@
 import modal
 from Training_data_transformation import get_training_data
 import os
-LOCAL=False
+LOCAL=True
 
 if LOCAL == False:
    stub = modal.Stub("model-training")
    image = modal.Image.debian_slim().apt_install(["libgomp1"]).pip_install(["joblib","hopsworks", "seaborn", "joblib", "scikit-learn","xgboost"])
 
-   @stub.function(image=image, schedule=modal.Period(days=1), secret=modal.Secret.from_name("lab1"))
+   @stub.function(image=image, schedule=modal.Cron("0 16 * * *"), secret=modal.Secret.from_name("lab1"))
    def f():
        g()
 
@@ -33,7 +33,7 @@ def g():
     model_dir="aqi_model"
     if os.path.isdir(model_dir)==False:
         os.mkdir(model_dir)
-    joblib.dump(model,model_dir+"/aqi_model.plk")
+    joblib.dump(model,model_dir+"/aqi_model.pkl")
     
     input_schema = Schema(x_train)
     output_schema = Schema(y_train)

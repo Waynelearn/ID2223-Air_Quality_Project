@@ -2,6 +2,7 @@ import urllib.request
 import datetime
 import json
 import pandas as pd
+import pytz
 
 class WeatherAPI:
     def __init__(self,API_KEY,lat,lng,unitGroup,include):
@@ -17,7 +18,7 @@ class WeatherAPI:
 
     def forcast_url(self,n_days):
         #not including today
-        start=datetime.date.today()+datetime.timedelta(days=1)
+        start=datetime.date.today(pytz.utc)+datetime.timedelta(days=1)
         end=start+datetime.timedelta(days=n_days-1)
         start=start.strftime("%Y-%m-%d")
         end=end.strftime("%Y-%m-%d")
@@ -25,14 +26,14 @@ class WeatherAPI:
 
     def historical_url(self,n_days):
         #not including today
-        end=datetime.date.today()-datetime.timedelta(days=1)
+        end=datetime.date.today(pytz.utc)-datetime.timedelta(days=1)
         start=end-datetime.timedelta(days=n_days-1)
         start=start.strftime("%Y-%m-%d")
         end=end.strftime("%Y-%m-%d")
         return self.from_to_url(start,end)
 
     def today_url(self):
-        today=datetime.date.today()
+        today=datetime.date.today(pytz.utc)
         today=today.strftime("%Y-%m-%d")
         return self.from_to_url(today,today)
 
@@ -65,5 +66,5 @@ if __name__=='__main__':
     include="days"
     
     test=WeatherAPI(weather_api,lat,lng,unitGroup,include)
-    #print(test.forcast_url(7))
+    print(test.forcast_url(7))
     #test.query(test.historical_url(2)).to_csv("test.csv")
