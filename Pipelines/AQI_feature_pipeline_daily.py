@@ -27,6 +27,8 @@ def g():
 
     project = hopsworks.login(project="test42")
     fs = project.get_feature_store()
+
+    #webscrapping from aqi website for aqi number once every day
     soup = BeautifulSoup(page.content, "html.parser")
     result = soup.find(class_=class_select)
     result=int(result.contents[0])
@@ -35,13 +37,13 @@ def g():
     
 
     df = pd.DataFrame({"datetime":[curr_date],"aqi":[result]})#1 data point
-    df["datetime"]=df["datetime"].apply(lambda x:datetime.datetime.strptime(x,"%Y-%m-%d"))
+    #df["datetime"]=df["datetime"].apply(lambda x:datetime.datetime.strptime(x,"%Y-%m-%d"))
 
     fg = fs.get_or_create_feature_group(
-        name="aqi-daily",
+        name="aqi",
         version=1,
         primary_key=['datetime','aqi'], 
-        description="daily aqi")
+        description="aqi")
     fg.insert(df, write_options={"wait_for_job" : False})
 
 if __name__ == "__main__":

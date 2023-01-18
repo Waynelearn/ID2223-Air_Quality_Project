@@ -44,11 +44,11 @@ class WeatherAPI:
         return self.query(self.historical_url(n_days))
 
     def from_to_query(self,start,end):
-        return self.query(self.from_to_url(start,end)
+        return self.query(self.from_to_url(start,end))
 
 
 
-if __name__=="__main__":
+if __name__=='__main__':
     base_url="https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline"
     weather_api="F5B6R3DHJAYYTDG9XVLMMHRBR"
     lat=1.3521
