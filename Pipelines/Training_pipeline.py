@@ -1,5 +1,6 @@
 import modal
 from Training_data_transformation import get_training_data
+import os
 LOCAL=False
 
 if LOCAL == False:
@@ -19,6 +20,7 @@ def g():
     import joblib
     from hsml.schema import Schema
     from hsml.model_schema import ModelSchema
+    
 
     train_df=get_training_data()
     y=train_df["aqi"]
@@ -38,6 +40,7 @@ def g():
     
     model_schema = ModelSchema(input_schema, output_schema)
 
+    project=hopsworks.login(project="test42")
     mr = project.get_model_registry()
 
     aqi_model = mr.python.create_model(
@@ -45,7 +48,9 @@ def g():
         metrics={"mean_squared_error" : performance},
         model_schema=model_schema,
         description="Air Quality Forecast"
-    )   
+    )
+    aqi_model.save(model_dir)
+    print("MODEL DEPLOYED")
     
 if __name__ == "__main__":
     if LOCAL == True :
