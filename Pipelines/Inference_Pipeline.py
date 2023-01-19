@@ -1,6 +1,8 @@
 import os
 import modal
 from Weather_API_utility import WeatherAPI
+from Drawing import *
+
 LOCAL=True
 def weather_feature_engineering(df):
     #drop columns
@@ -102,7 +104,7 @@ def g():
 
     #L = datetime.datetime.now(datetime.timezone.utc).astimezone().tzinfo
     #print(L)
-    
+    create_image_with_values(final)
 
 if __name__ == "__main__":
     if LOCAL == True :
