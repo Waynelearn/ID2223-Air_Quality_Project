@@ -6,7 +6,7 @@ The goal of the project is to build a scalable AQI prediction service.
 
 We use both historical weather data and AQI data to predict AQI in Singapore for the next 7 days.
 
-## Hugging Face Spaces URL: 
+## Hugging Face Spaces URL: https://huggingface.co/spaces/WayneLinn/Singapore_Air_Quality_Prediction
 
 
 ## Date Source/ Model
@@ -25,12 +25,11 @@ We use both historical weather data and AQI data to predict AQI in Singapore for
 
 ## Pipeline
 
-Backfilling with acquired dataset
-1. `Backfill__weather_feature_pipeline.py`
+1. `Backfill__weather_feature_pipeline.py`: Backfilling with acquired dataset
 1. `Backfill_aqi_feature_pipeline.py`
 
 Daily upload new feature
-1. `AQI_feature_pipeline_daily.py`
+1. `AQI_feature_pipeline_daily.py` : Daily upload new feature
 1. `Weather_feature_pipeline_daily.py`
 
 Training
