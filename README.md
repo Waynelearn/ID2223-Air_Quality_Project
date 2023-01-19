@@ -6,7 +6,8 @@ The goal of the project is to build a scalable AQI prediction service.
 
 We use both historical weather data and AQI data to predict AQI in Singapore for the next 7 days.
 
-## Hugging Face Spaces URL: https://huggingface.co/spaces/WayneLinn/Singapore_Air_Quality_Prediction
+## Hugging Face Spaces URL: 
+https://huggingface.co/spaces/WayneLinn/Singapore_Air_Quality_Prediction
 
 
 ## Date Source/ Model
