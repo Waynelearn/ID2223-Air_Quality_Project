@@ -18,23 +18,23 @@ class WeatherAPI:
 
     def forcast_url(self,n_days):
         #not including today
-        start=datetime.date.today(pytz.utc)+datetime.timedelta(days=1)
-        end=start+datetime.timedelta(days=n_days-1)
+        start = datetime.datetime.now(pytz.timezone('Asia/Singapore')) + datetime.timedelta(days=1)
+        end = start+datetime.timedelta(days=n_days-1)
         start=start.strftime("%Y-%m-%d")
         end=end.strftime("%Y-%m-%d")
         return self.from_to_url(start,end)
 
     def historical_url(self,n_days):
         #not including today
-        end=datetime.date.today(pytz.utc)-datetime.timedelta(days=1)
+        end= datetime.datetime.now(pytz.timezone('Asia/Singapore')) -datetime.timedelta(days=1)
         start=end-datetime.timedelta(days=n_days-1)
         start=start.strftime("%Y-%m-%d")
         end=end.strftime("%Y-%m-%d")
         return self.from_to_url(start,end)
 
     def today_url(self):
-        today=datetime.date.today(pytz.utc)
-        today=today.strftime("%Y-%m-%d")
+        today = datetime.datetime.now(pytz.timezone('Asia/Singapore'))
+        today = today.strftime("%Y-%m-%d")
         return self.from_to_url(today,today)
 
     def query(self,url):

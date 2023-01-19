@@ -1,7 +1,7 @@
 import os
 import modal
 from Weather_API_utility import WeatherAPI
-LOCAL=False
+LOCAL=True
 def weather_feature_engineering(df):
     #drop columns
     temp=df.copy()
@@ -32,18 +32,23 @@ def g():
     import joblib
     import datetime
     import numpy as np
+    import pytz
+
     project = hopsworks.login(project="test42")
     fs = project.get_feature_store()
+
     mr = project.get_model_registry()
     model = mr.get_model("aqi_model_modal", version=1)
     model_dir = model.download()
     model = joblib.load(model_dir + "/aqi_model.pkl")
+    print("Model loaded")
 
     weather_api="F5B6R3DHJAYYTDG9XVLMMHRBR"
     lat=1.3521
     lng=103.8198
     unitGroup="metric"
     include="days"
+
     w=WeatherAPI(weather_api,lat,lng,unitGroup,include)
 
     weather_input=w.forcast_query(7)
@@ -88,12 +93,15 @@ def g():
         pred=model.predict(curr_x)[0]
         res.append(pred)
         mapping=update_mapping(pred,mapping)
-    final=pd.DataFrame({"datetime":date_lst,"aqi":res})
-    print(final)
-    print(datetime.timezone)
-    L = datetime.datetime.now(datetime.timezone.utc).astimezone().tzinfo
 
-    print(L)
+    final=pd.DataFrame({"datetime":date_lst,"aqi":res})
+
+    print("Predictions for AQI:",final)
+    print("UTC time:",datetime.datetime.utcnow())
+    print("Singapore time", datetime.datetime.now(pytz.timezone('Asia/Singapore')))
+
+    #L = datetime.datetime.now(datetime.timezone.utc).astimezone().tzinfo
+    #print(L)
     
 
 if __name__ == "__main__":
