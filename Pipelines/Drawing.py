@@ -9,7 +9,7 @@ def create_image_with_values(df):
 
     # Define the size of the image
     width = 1400
-    height = width/7
+    height = int(width/7)
 
     # Create a new image with a transparent background
     image = Image.new("RGBA", (width, height), (255, 255, 255, 0))
@@ -33,10 +33,15 @@ def create_image_with_values(df):
         draw.rectangle([(x1, y1), (x2, y2)], fill=square_color)
 
         
-        str = dt[i].strftime("%Y-%m-%d")
-        text_width, text_height = draw.textsize(str + f "\nAQI {values[i]}", font=font)
+        string = list(dt[i])
+        #text_width, text_height = draw.textsize(str + f "\nAQI {values[i]}", font=font)
+        #draw.text((x1+(width/7-text_width)/2, y1+(height-text_height)/2), str + f"\nAQI {values[i]}", font=font, fill=(255, 255, 255))
 
-        draw.text((x1+(width/7-text_width)/2, y1+(height-text_height)/2), str + f"\nAQI {values[i]}", font=font, fill=(255, 255, 255))
+        #text_width, text_height = draw.textsize(f"Square {i + 1} \nValue: {values[i]}", font=font)
+        #draw.text((x1+(width/7-text_width)/2, y1+(height-text_height)/2), f"Square {i + 1} \nValue: {values[i]}", font=font, fill=(255, 255, 255))
+
+        text_width, text_height = draw.textsize(f"{string[i]} \nAQI: {values[i]}", font=font)
+        draw.text((x1+(width/7-text_width)/2, y1+(height-text_height)/2), f"{string[i]} \nAQI: {values[i]}", font=font, fill=(255, 255, 255))
 
     # Save the image
     image.save("AQI.png", format='PNG')

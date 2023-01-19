@@ -104,7 +104,11 @@ def g():
 
     #L = datetime.datetime.now(datetime.timezone.utc).astimezone().tzinfo
     #print(L)
-    create_image_with_values(final)
+    #create_image_with_values(final)
+
+    final.to_csv("./aqi_results.csv")
+    project.get_dataset_api().upload("./aqi_results.csv","Resources", overwrite=True) 
+    print("upload aqi csv to hopsworks successfully")
 
 if __name__ == "__main__":
     if LOCAL == True :
